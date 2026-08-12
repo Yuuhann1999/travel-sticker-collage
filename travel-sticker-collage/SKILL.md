@@ -1,15 +1,15 @@
 ---
 name: travel-sticker-collage
-description: "从至少 2 张上传照片中识别共同主题或提炼松散照片的视觉共性，以独立语义对象抠图为主要单位，提取主体、物件、纹理和少量环境片段，生成彩色贴纸杂志风的无文字拼贴海报；适用于旅行、活动、展览、日常和随机照片组，支持任意张数，照片少时增加单图元素，照片多时保持重点与丰富度。"
+description: "从至少 2 张上传照片中识别共同主题或提炼松散照片的视觉共性，以独立语义对象抠图为主要单位，提取主体、物件、纹理和少量环境片段，并依据本组素材的主色、主题气质与 hero 对比自动选择背景色，生成彩色贴纸杂志风的无文字拼贴海报；适用于旅行、活动、展览、日常和随机照片组，支持任意张数。"
 ---
 
 # 彩色贴纸旅行拼贴
 
 ## 目标
 
-把照片组转成一张竖版 4:5、无新增文字的彩色贴纸杂志海报。默认使用奶油黄或暖白纸张、明快但受控的高对比配色、干净主体抠图、轻微贴纸描边和少量半调网点。
+把照片组转成一张竖版 4:5、无新增文字的彩色贴纸杂志海报。使用明快但受控的高对比配色、干净主体抠图、轻微贴纸描边、纯色纸片和少量半调网点。
 
-把 `assets/independent-cutout-reference.png` 作为默认视觉标准：学习其独立主体抠图、比例反差、重叠关系、纯色衬底和单一环境锚点。该图片只提供风格与构图参考，不得复制其中的海豚、鱼、食物、人物或其他内容，除非这些对象也出现在用户素材中。
+不要依赖固定风格参考图。只根据用户素材、主题分析和本 Skill 的提示词规则建立视觉效果，避免参考图把背景色、构图和对象类型锁死。
 
 ## 不可妥协的视觉约束
 
@@ -86,23 +86,40 @@ description: "从至少 2 张上传照片中识别共同主题或提炼松散照
 - 使用完整主体剪影、圆形小局部、窄纹理条和局部放大；不要把“撕裂照片块”当成一种常规裁切形式。
 - 把纯色纸片、半调网点和抽象形状放在对象后方，充当视觉连接与色彩节奏，而不是用更多完整照片填空。
 
-### 5. 使用默认视觉语言
+### 5. 根据素材选择背景与配色
 
-- 底色优先使用奶油黄、暖白或浅色纸张；根据主题可切换浅蓝、浅粉或浅灰。
-- 配色优先使用番茄红、热粉、电光蓝、湖水青、柠檬黄、淡紫和黑色，控制在 3–5 个主色。
-- 使用干净摄影剪影、细窄白色/奶油色贴纸描边、轻微错位阴影、少量半调网点和哑光纸纹理。
-- 让摄影对象保持真实质感，装饰层保持平面图形感。避免儿童贴纸、廉价模板和装饰爆炸。
-- 不添加标题、日期、标签、数字、伪文字或水印。裁掉源照片文字，或将其缩小为不可读色块，除非用户明确要求保留。
+不要设置固定默认底色，尤其不要无条件使用奶油黄。生成前先完成下面的配色决策：
+
+1. 从全部照片中识别 2–4 个重复出现的主色，并记录 hero 的主要明度、饱和度和冷暖倾向；
+2. 判断主题气质，例如海岛清爽、古建沉稳、都市冷峻、夜景霓虹、食物温暖、自然宁静、可爱活泼或随机视觉日记；
+3. 为背景选择一个与 hero 有清晰明度或冷暖反差的低饱和纸张色，避免背景与最大主体同色融合；
+4. 从素材已有颜色中选 2–3 个强调色，再按需要加入一个互补色；整张海报控制在 3–5 个主要色相；
+5. 在提示词中写出本次实际选择的背景颜色名称与近似 hex，不要只写 `colorful background`、`light paper` 或沿用上次配色。
+
+可参考但不要机械套用：
+
+| 素材/主题倾向 | 可考虑的背景方向 |
+|---|---|
+| 海洋、蓝天、冷色旅行 | 沙白、浅珊瑚、雾粉、暖灰，避免再用大面积蓝色吞没主体 |
+| 古建、历史、人文 | 低饱和青瓷绿、灰蓝、陶土粉、宣纸灰 |
+| 城市、建筑、金属 | 冷灰、粉蓝、雾紫、暖白 |
+| 绿植、山野、公园 | 淡紫、灰粉、浅天蓝、石灰白，避免绿色背景与植物粘连 |
+| 食物、咖啡、暖色物件 | 鼠尾草绿、浅青、淡蓝灰、柔和米白 |
+| 夜景、霓虹、深色素材 | 深海军蓝、炭灰、墨紫，搭配少量高亮色 |
+| 可爱、玩具、糖果色 | 薄荷绿、浅粉、淡紫、粉蓝，选择与 hero 反差最大的一种 |
+
+同一批素材再次生成时，若用户没有要求复刻，主动避开上一版背景色，探索另一种仍与素材协调的背景方向。
+
+视觉语言保持：干净摄影剪影、细窄白色或浅色贴纸描边、轻微错位阴影、纯色纸片、少量半调网点和哑光纸纹理。摄影对象保持真实质感，装饰层保持平面图形感。避免儿童贴纸、廉价模板和装饰爆炸。不添加标题、日期、标签、数字、伪文字或水印；裁掉源照片文字，或将其缩小为不可读色块，除非用户明确要求保留。
 
 用户指定其他风格时，仍须保留“独立对象抠图、单一环境锚点、撕纸只用于图形衬底、不做照片墙”四条核心规则。
 
-### 6. 处理参考图数量限制
+### 6. 处理输入图数量限制
 
 使用内置 `image_gen`。一次最多接收 5 个本地路径：
 
-- 尽量预留 1 个路径给 `assets/independent-cutout-reference.png`，并明确标记为仅供风格参考；
-- 4 张以内的用户素材可直接传入；超过 4 张时，调用 `scripts/make_contact_sheet.py` 生成带编号素材板；
-- 最多使用 4 张素材板加 1 张风格参考。先用 `view_image` 检查素材板，再生成海报；
+- 5 张以内的用户素材可直接传入；超过 5 张时，调用 `scripts/make_contact_sheet.py` 生成带编号素材板；
+- 最多使用 5 张素材板。先用 `view_image` 检查素材板，再生成海报；
 - 在提示词中逐一说明每个编号面板要提取的对象类型，并强调素材板本身绝不能出现在结果中；
 - 临时素材板放在工作区 `tmp/imagegen/`，成品才复制到用户指定目录。
 
@@ -113,19 +130,19 @@ description: "从至少 2 张上传照片中识别共同主题或提炼松散照
 ```text
 Use case: compositing
 Asset type: portrait travel-art poster
-Style reference: use the dedicated reference only for independent object cutouts, hierarchy, flat graphic backplates and spacing; never copy its subjects
 Source plan: panel/image number -> OBJECT_CUTOUT, SEMANTIC_CLUSTER, ENVIRONMENT_ANCHOR or MICRO_TEXTURE
 Primary request: one finished colorful sticker-magazine collage; foreground is composed of background-removed semantic objects, not photo patches
-Scene/backdrop: flat paper field; at most one environment anchor covering no more than about 30% of the canvas
+Scene/backdrop: <theme-derived low-saturation paper color with approximate hex and reason for contrast>; at most one environment anchor covering no more than about 30% of the canvas
 Subject: one cutout hero, 2–4 cutout secondary objects, supporting object stickers
-Style/medium: clean contour extraction, narrow cream sticker outlines, flat color paper shapes, restrained halftone texture
+Style/medium: contemporary Japanese pop-art travel zine; refined colorful sticker collage; clean photographic contour extraction; narrow light sticker outlines; bold flat paper shapes; playful oversized crops; subtle halftone dots and washi-paper texture; premium art direction rather than a children's scrapbook
 Composition/framing: portrait 4:5, scale contrast, diagonal flow, clear margins and overlaps
+Color palette: <3–5 colors derived from the photos; name the background and accent colors explicitly>
 Text (verbatim): none
-Hard constraints: at least 80% of photographic elements by count are isolated semantic cutouts; only one large environmental scene; torn paper is allowed only for non-photographic color shapes; no intact scene inside a torn edge
+Hard constraints: at least 80% of photographic elements by count are isolated semantic cutouts; only one large environmental scene; torn paper is allowed only for non-photographic color shapes; no intact scene inside a torn edge; do not default to yellow; choose the background from this photo set's theme and hero contrast
 Avoid: full-photo patches, torn-edge photographs, multiple scenic panels, scrapbook photo wall, equal-size thumbnails, pseudo-text, unrelated objects
 ```
 
-明确写出每张照片要抠出的对象，尤其要把风景照片改写为“建筑/树/船/动物/车辆等独立对象”。不要只写“参考这些照片”，也不要泛写“撕纸拼贴”。
+明确写出每张照片要抠出的对象，尤其要把风景照片改写为“建筑/树/船/动物/车辆等独立对象”。同时写明本次背景色为何适合主题、如何与 hero 形成反差。不要只写“参考这些照片”，也不要泛写“撕纸拼贴”。
 
 ### 8. 检查并迭代
 
@@ -136,6 +153,7 @@ Avoid: full-photo patches, torn-edge photographs, multiple scenic panels, scrapb
 - 是否只有 1 个大型环境锚点，且面积约不超过 30%；
 - 是否出现第二个大型场景、撕边完整照片、照片墙或整块整块的场景拼接；
 - hero 是否清晰，元素是否丰富但仍有留白；
+- 背景色是否由本次主题和素材推导，是否与 hero 保持足够反差，而不是惯性使用黄色；
 - 是否出现虚构对象、身份漂移、伪文字、标签或水印；
 - 纯色衬底、描边、阴影和半调纹理是否统一。
 

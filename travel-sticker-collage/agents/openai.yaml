@@ -1,4 +1,4 @@
 interface:
   display_name: "彩色贴纸旅行拼贴"
-  short_description: "自动识别主题并将照片主体独立抠出，生成彩色贴纸杂志拼贴海报"
-  default_prompt: "Use $travel-sticker-collage to turn my uploaded photos into a text-free sticker-magazine poster built from independent semantic cutouts and no more than one environmental scene."
+  short_description: "自动识别主题、独立抠出主体并匹配专属背景色的彩色贴纸拼贴海报"
+  default_prompt: "Use $travel-sticker-collage to turn my uploaded photos into a text-free sticker-magazine collage with independent cutouts and a theme-derived background color."

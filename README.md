@@ -6,6 +6,8 @@
 
 这个 Skill 的重点不是把照片做成撕纸照片墙，而是让大部分摄影元素成为背景被移除的独立对象。每张海报只允许一个主要环境画面，其余风景照片优先提取建筑、树、船、车辆、动物等具体对象。
 
+背景颜色不是固定模板。Skill 会先分析本组照片反复出现的主色、主题气质以及最大主体的明暗和冷暖，再选择具有对比、但不过度抢眼的纸张底色。因此海岛、古建、城市、绿植、食物、夜景和玩具题材会获得不同的背景方向。
+
 ## 安装
 
 使用 `skills` CLI：
@@ -46,6 +48,7 @@ cp -R ./travel-sticker-collage ~/.codex/skills/
 - 撕纸、网点和胶带只用于纯色色块与抽象纹理，不包裹完整照片。
 - 禁止完整照片块、多个大型风景面板、等尺寸缩略图和照片墙。
 - 默认使用一个 hero、2–4 个 secondary，以及若干小型 supporting elements。
+- 根据照片主色、主题气质和 hero 对比选择背景色，不无条件默认黄色。
 - 默认画幅为 4:5 竖版，不添加标题、标签、日期、伪文字或水印。
 
 ## 照片数量策略
@@ -57,7 +60,9 @@ cp -R ./travel-sticker-collage ~/.codex/skills/
 | 6–12 张 | 设置一个主视觉，每张贡献 1–2 个主体或小型锚点 |
 | 13 张以上 | 合并相近对象形成节奏，风景转为地标抠图或小型环境窗口 |
 
-参考图片数量超过图像工具的单次限制时，Skill 会调用随附的 `make_contact_sheet.py`，把照片整理成带编号的临时素材板，再逐一说明每张照片需要提取的对象。
+输入图片数量超过图像工具的单次限制时，Skill 会调用随附的 `make_contact_sheet.py`，把照片整理成带编号的临时素材板，再逐一说明每张照片需要提取的对象。这个素材板只是输入整理工具，不是风格参考。
+
+Skill 不依赖任何固定风格参考图。示例海报只展示可能的结果，不会在运行时传给图像模型；视觉效果由 `SKILL.md` 中的对象分类、构图、配色和提示词规则建立。
 
 ## 示例效果
 
@@ -89,8 +94,6 @@ travel-sticker-collage/
 │   ├── SKILL.md
 │   ├── agents/
 │   │   └── openai.yaml
-│   ├── assets/
-│   │   └── independent-cutout-reference.png
 │   └── scripts/
 │       └── make_contact_sheet.py
 ├── examples/
@@ -101,12 +104,11 @@ travel-sticker-collage/
 
 ## 依赖与说明
 
-- 本仓库提供 Skill 指令、Agent 元数据、素材板脚本、风格参考和示例图，不包含图像模型、图片生成 API 或 API Key。
+- 本仓库提供 Skill 指令、Agent 元数据、素材板脚本和示例图，不包含图像模型、图片生成 API 或 API Key。
 - 实际生成需要宿主 Agent 具备图片查看和图片生成能力。
 - `scripts/make_contact_sheet.py` 需要 Python 3 与 Pillow。
-- `assets/independent-cutout-reference.png` 是 Skill 的视觉参考组成部分，安装时不要单独复制 `SKILL.md`。
 - 图像模型存在随机性。正式使用前应检查主体是否被完整抠出、是否出现多余环境照片、文字、标签或水印。
 
 ## 许可证
 
-Skill 指令与脚本使用 [MIT License](LICENSE)。示例图和参考图可能包含第三方商标、角色或商品形象；相关权利归各自权利人，仓库许可证不会转移这些第三方权利。
+Skill 指令与脚本使用 [MIT License](LICENSE)。示例图可能包含第三方商标、角色或商品形象；相关权利归各自权利人，仓库许可证不会转移这些第三方权利。
